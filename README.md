@@ -74,10 +74,6 @@ Open http://localhost:5173 and click “Load Sample Draft” then “Run Brand C
 2. **Visual brand checks** – Upload logo/colour reference assets and flag off-brand colours or missing logo usage in image content (stretch goal now becoming core).
 3. **Recurring-issue analytics dashboard** – Aggregate findings across drafts to surface unclear guidelines and training needs, with exportable reports for brand managers.
 
-## Team
-
-Replace with actual names before final submission.
-
 ## Licence
 
 MIT – built for the We Code Coder hackathon.
