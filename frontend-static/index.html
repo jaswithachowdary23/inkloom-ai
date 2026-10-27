@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inkloom AI – Intelligent Brand Governance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1419; --surface: #1a2332; --surface2: #243044; --border: #2d3a4f;
+      --text: #e8eef7; --muted: #8b9cb3; --primary: #00c2a8; --primary-h: #00a890;
+      --danger: #ef4444; --success: #10b981; --radius: 10px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh;
+      background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,194,168,0.12), transparent); }
+    .shell { display: flex; min-height: 100vh; }
+    .sidebar { width: 250px; background: var(--surface); border-right: 1px solid var(--border); padding: 1.5rem 1rem; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+    .logo-mark { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), #0ea5e9); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #0f1419; }
+    .logo-text { font-weight: 700; font-size: 1.1rem; }
+    .logo-sub { font-size: 0.7rem; color: var(--muted); }
+    .nav-btn { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.9rem; border-radius: 8px; color: var(--muted); font-weight: 500; font-size: 0.92rem; background: transparent; border: none; width: 100%; text-align: left; cursor: pointer; margin-bottom: 0.25rem; transition: 0.15s; }
+    .nav-btn:hover, .nav-btn.active { background: rgba(0,194,168,0.12); color: var(--primary); }
+    .main { flex: 1; padding: 2rem 2.5rem; max-width: 1100px; }
+    h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: 0.3rem; letter-spacing: -0.02em; }
+    .sub { color: var(--muted); margin-bottom: 1.75rem; font-size: 0.95rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1.2rem; }
+    .card h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.55rem 1.1rem; border-radius: 8px; font-weight: 500; font-size: 0.9rem; border: none; cursor: pointer; transition: 0.15s; font-family: inherit; }
+    .btn-primary { background: var(--primary); color: #0f1419; font-weight: 600; }
+    .btn-primary:hover { background: var(--primary-h); }
+    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--border); }
+    .btn-success { background: rgba(16,185,129,0.15); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+    .btn-danger { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+    input, textarea, select { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 0.65rem 0.9rem; font-family: inherit; font-size: 0.95rem; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,194,168,0.2); }
+    textarea { min-height: 140px; resize: vertical; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--muted); margin-bottom: 0.35rem; }
+    .stats { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; flex: 1; min-width: 130px; }
+    .stat-v { font-size: 1.55rem; font-weight: 700; color: var(--primary); }
+    .stat-l { font-size: 0.8rem; color: var(--muted); }
+    .badge { display: inline-flex; padding: 0.18rem 0.5rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+    .b-critical { background: rgba(220,38,38,0.2); color: #fca5a5; }
+    .b-high { background: rgba(249,115,22,0.2); color: #fdba74; }
+    .b-medium { background: rgba(234,179,8,0.2); color: #fde047; }
+    .b-low { background: rgba(100,116,139,0.25); color: #94a3b8; }
+    .b-rule { background: rgba(0,194,168,0.15); color: var(--primary); }
+    .b-ai { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .finding { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 0.7rem; background: var(--surface2); }
+    .finding-h { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 0.4rem; }
+    .finding-t { font-weight: 600; font-size: 0.93rem; }
+    .finding-e { color: var(--muted); font-size: 0.87rem; margin: 0.35rem 0 0.6rem; line-height: 1.5; }
+    .sug { background: rgba(0,194,168,0.08); border: 1px solid rgba(0,194,168,0.25); border-radius: 6px; padding: 0.55rem 0.8rem; font-size: 0.87rem; margin-top: 0.4rem; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 900px) { .shell { flex-direction: column; } .sidebar { width: 100%; height: auto; position: relative; } .grid2 { grid-template-columns: 1fr; } .main { padding: 1.2rem; } }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 500; font-size: 0.78rem; text-transform: uppercase; }
+    .status { display: inline-block; padding: 0.18rem 0.55rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; text-transform: capitalize; }
+    .s-draft { background: rgba(100,116,139,0.2); color: #94a3b8; }
+    .s-under_review { background: rgba(59,130,246,0.2); color: #93c5fd; }
+    .s-approved { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+    .s-changes_requested { background: rgba(245,158,11,0.2); color: #fcd34d; }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--surface); border: 1px solid var(--border); padding: 0.85rem 1.2rem; border-radius: 10px; z-index: 99; box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+    .hidden { display: none !important; }
+    .empty { text-align: center; padding: 2rem; color: var(--muted); }
+    .ws-label { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--muted); }
+    .ws-name { font-weight: 600; font-size: 0.9rem; color: var(--text); margin-top: 0.25rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-mark">I</div>
+        <div><div class="logo-text">Inkloom AI</div><div class="logo-sub">Brand Governance</div></div>
+      </div>
+      <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
+      <button class="nav-btn" data-view="new">＋ New Draft</button>
+      <button class="nav-btn" data-view="review">📄 Review Draft</button>
+      <button class="nav-btn" data-view="guidelines">📚 Brand Rules</button>
+      <div class="ws-label">Active Workspace</div>
+      <div class="ws-name" id="wsName">Loading…</div>
+    </aside>
+    <main class="main">
+      <!-- DASHBOARD -->
+      <section id="view-dashboard">
+        <h1>Brand Governance Dashboard</h1>
+        <p class="sub">Review drafts against approved guidelines before publication.</p>
+        <div class="stats" id="stats"></div>
+        <div class="card">
+          <h2>Recent Drafts</h2>
+          <div id="draftList"><div class="empty">Loading…</div></div>
+        </div>
+      </section>
+
+      <!-- NEW DRAFT -->
+      <section id="view-new" class="hidden">
+        <h1>Submit New Draft</h1>
+        <p class="sub">Paste marketing copy. Inkloom checks it against brand rules and approved sources.</p>
+        <div class="card">
+          <div class="form-group"><label>Title</label><input id="draftTitle" placeholder="e.g. Q4 Social Campaign" /></div>
+          <div class="form-group"><label>Channel</label>
+            <select id="draftChannel">
+              <option value="social">Social Post</option>
+              <option value="ad">Advertisement Copy</option>
+              <option value="campaign">Campaign Document</option>
+              <option value="email">Email / Newsletter</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Draft Content</label><textarea id="draftContent" rows="9" placeholder="Paste or type your draft…"></textarea></div>
+          <button class="btn btn-primary" id="btnCheck">✨ Run Brand Checks</button>
+        </div>
+        <div class="card">
+          <h2>Try a sample</h2>
+          <p style="color:var(--muted);font-size:0.9rem;margin-bottom:0.8rem">Loads a draft that triggers claims, terminology and tone checks.</p>
+          <button class="btn btn-secondary" id="btnSample">Load Sample Draft</button>
+        </div>
+      </section>
+
+      <!-- REVIEW -->
+      <section id="view-review" class="hidden">
+        <div id="reviewContent"><div class="empty">Select or create a draft to review.</div></div>
+      </section>
+
+      <!-- GUIDELINES -->
+      <section id="view-guidelines" class="hidden">
+        <h1>Brand Rule Library</h1>
+        <p class="sub">Explicit guidelines used by the deterministic and AI-assisted checkers.</p>
+        <div class="card">
+          <h2>＋ Add Guideline</h2>
+          <div class="grid2">
+            <div class="form-group"><label>Category</label>
+              <select id="gCat"><option>terminology</option><option>prohibited</option><option>claim</option><option>tone</option><option>preferred</option></select>
+            </div>
+            <div class="form-group"><label>Severity</label>
+              <select id="gSev"><option>low</option><option>medium</option><option>high</option><option>critical</option></select>
+            </div>
+          </div>
+          <div class="form-group"><label>Title</label><input id="gTitle" placeholder="Short title" /></div>
+          <div class="form-group"><label>Content / Phrase</label><textarea id="gContent" rows="2"></textarea></div>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;margin-bottom:1rem">
+            <input type="checkbox" id="gExact" style="width:auto" /> Exact phrase match
+          </label>
+          <button class="btn btn-primary" id="btnAddG">Add Guideline</button>
+        </div>
+        <div class="card">
+          <h2>Current Guidelines</h2>
+          <div id="gList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="toast" class="toast hidden"></div>
+
+  <script>
+    const API = 'http://localhost:8000/api';
+    let currentWs = null, drafts = [], guidelines = [], selectedDraft = null;
+
+    const $ = id => document.getElementById(id);
+    const showToast = msg => { const t = $('toast'); t.textContent = msg; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2800); };
+
+    async function api(path, opts = {}) {
+      const r = await fetch(API + path, { headers: { 'Content-Type': 'application/json' }, ...opts });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    function switchView(name) {
+      document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+      $('view-' + name).classList.remove('hidden');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
+
+    function sevBadge(s) {
+      return `<span class="badge b-${s}">${s}</span>`;
+    }
+
+    async function loadAll() {
+      const ws = await api('/workspaces');
+      currentWs = ws[0];
+      $('wsName').textContent = currentWs.name;
+      drafts = await api(`/workspaces/${currentWs.id}/drafts`);
+      guidelines = await api(`/workspaces/${currentWs.id}/guidelines`);
+      renderDashboard();
+      renderGuidelines();
+    }
+
+    function renderDashboard() {
+      $('stats').innerHTML = `
+        <div class="stat"><div class="stat-v">${drafts.length}</div><div class="stat-l">Total Drafts</div></div>
+        <div class="stat"><div class="stat-v">${drafts.filter(d=>d.status==='under_review').length}</div><div class="stat-l">Under Review</div></div>
+        <div class="stat"><div class="stat-v">${drafts.filter(d=>d.status==='approved').length}</div><div class="stat-l">Approved</div></div>
+        <div class="stat"><div class="stat-v">${guidelines.length}</div><div class="stat-l">Guidelines</div></div>`;
+      if (!drafts.length) {
+        $('draftList').innerHTML = '<div class="empty">No drafts yet. Create one from “New Draft”.</div>';
+        return;
+      }
+      $('draftList').innerHTML = `<table><thead><tr><th>Title</th><th>Channel</th><th>Status</th><th>Findings</th><th></th></tr></thead>
+        <tbody>${drafts.slice(0,10).map(d => `<tr>
+          <td>${d.title}</td>
+          <td style="text-transform:capitalize">${d.channel}</td>
+          <td><span class="status s-${d.status}">${d.status.replace('_',' ')}</span></td>
+          <td>${d.findings?.length||0}</td>
+          <td><button class="btn btn-secondary" style="padding:0.3rem 0.65rem;font-size:0.8rem" onclick="openDraft(${d.id})">Open →</button></td>
+        </tr>`).join('')}</tbody></table>`;
+    }
+
+    window.openDraft = async (id) => {
+      selectedDraft = await api(`/drafts/${id}`);
+      renderReview();
+      switchView('review');
+    };
+
+    function renderReview() {
+      if (!selectedDraft) return;
+      const openF = (selectedDraft.findings || []).filter(f => f.status === 'open');
+      const resolved = (selectedDraft.findings || []).filter(f => f.status !== 'open');
+      $('reviewContent').innerHTML = `
+        <h1>${selectedDraft.title}</h1>
+        <p class="sub">Channel: <strong style="text-transform:capitalize">${selectedDraft.channel}</strong> ·
+          Status: <span class="status s-${selectedDraft.status}">${selectedDraft.status.replace('_',' ')}</span></p>
+        <div class="grid2">
+          <div class="card">
+            <h2>Draft Content</h2>
+            <div style="white-space:pre-wrap;line-height:1.65;font-size:0.95rem">${selectedDraft.content}</div>
+            <div style="margin-top:1.1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+              <button class="btn btn-secondary" onclick="recheck()">↻ Recheck</button>
+              ${openF.some(f=>f.suggested_text) ? '<button class="btn btn-primary" onclick="applySug()">Apply All Suggestions</button>' : ''}
+            </div>
+          </div>
+          <div class="card">
+            <h2>⚠ Findings (${selectedDraft.findings?.length||0})</h2>
+            ${openF.length===0 && resolved.length===0 ? '<div class="empty">✓ No issues found</div>' : ''}
+            ${openF.map(f => `
+              <div class="finding">
+                <div class="finding-h">
+                  <div class="finding-t">${f.title}</div>
+                  <div>${sevBadge(f.severity)} <span class="badge ${f.is_rule_based?'b-rule':'b-ai'}">${f.is_rule_based?'Rule-based':'AI-assisted'}</span></div>
+                </div>
+                <div class="finding-e">${f.explanation}</div>
+                ${f.original_text ? `<div style="font-size:0.85rem;margin-bottom:0.3rem"><strong>Matched:</strong> “${f.original_text}”</div>` : ''}
+                ${f.suggested_text ? `<div class="sug"><strong>Suggestion:</strong> ${f.suggested_text}</div>` : ''}
+                <div style="margin-top:0.6rem;display:flex;gap:0.4rem">
+                  <button class="btn btn-success" style="padding:0.3rem 0.65rem;font-size:0.8rem" onclick="updFinding(${f.id},'accepted')">Accept</button>
+                  <button class="btn btn-secondary" style="padding:0.3rem 0.65rem;font-size:0.8rem" onclick="updFinding(${f.id},'rejected')">Reject</button>
+                </div>
+              </div>`).join('')}
+            ${resolved.length ? `<div style="margin-top:0.8rem;opacity:0.7;font-size:0.8rem;color:var(--muted)">Resolved (${resolved.length})</div>
+              ${resolved.map(f=>`<div class="finding" style="opacity:0.75"><div class="finding-t" style="font-size:0.87rem">${f.title}</div><span class="badge" style="background:var(--surface2);color:var(--muted)">${f.status}</span></div>`).join('')}` : ''}
+          </div>
+        </div>
+        <div class="card">
+          <h2>🛡 Human Approval</h2>
+          <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1rem">AI findings are advisory. A reviewer must approve before publication.</p>
+          <div style="display:flex;gap:0.7rem;flex-wrap:wrap">
+            ${(selectedDraft.status==='draft'||selectedDraft.status==='changes_requested') ? '<button class="btn btn-primary" onclick="submitRev()">➤ Submit for Review</button>' : ''}
+            ${selectedDraft.status==='under_review' ? `
+              <button class="btn btn-success" onclick="approve('approve')">✓ Approve</button>
+              <button class="btn btn-danger" onclick="approve('request_changes')">Request Changes</button>` : ''}
+            ${selectedDraft.status==='approved' ? '<div style="color:var(--success);font-weight:600">✓ Approved for publication</div>' : ''}
+          </div>
+        </div>`;
+    }
+
+    window.updFinding = async (id, status) => {
+      await api(`/findings/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+      selectedDraft = await api(`/drafts/${selectedDraft.id}`);
+      renderReview(); showToast('Finding ' + status);
+    };
+    window.applySug = async () => {
+      await api(`/drafts/${selectedDraft.id}/apply-suggestions`, { method: 'POST' });
+      selectedDraft = await api(`/drafts/${selectedDraft.id}`);
+      renderReview(); showToast('Suggestions applied');
+    };
+    window.recheck = async () => {
+      selectedDraft = await api(`/drafts/${selectedDraft.id}/recheck`, { method: 'POST' });
+      renderReview(); showToast('Recheck complete');
+    };
+    window.submitRev = async () => {
+      selectedDraft = await api(`/drafts/${selectedDraft.id}/submit`, { method: 'POST' });
+      drafts = await api(`/workspaces/${currentWs.id}/drafts`);
+      renderReview(); showToast('Submitted for review');
+    };
+    window.approve = async (action) => {
+      selectedDraft = await api(`/drafts/${selectedDraft.id}/approve`, { method: 'POST', body: JSON.stringify({ action, comment: action==='approve'?'Approved':'Please address findings' }) });
+      drafts = await api(`/workspaces/${currentWs.id}/drafts`);
+      renderReview(); showToast(action==='approve'?'Approved':'Changes requested');
+    };
+
+    $('btnCheck').onclick = async () => {
+      const content = $('draftContent').value.trim();
+      if (!content) return showToast('Enter some content');
+      try {
+        selectedDraft = await api('/drafts', { method: 'POST', body: JSON.stringify({
+          workspace_id: currentWs.id,
+          title: $('draftTitle').value || 'Untitled Draft',
+          content, channel: $('draftChannel').value
+        })});
+        drafts = await api(`/workspaces/${currentWs.id}/drafts`);
+        renderReview(); switchView('review'); showToast('Draft checked');
+        $('draftContent').value = ''; $('draftTitle').value = '';
+      } catch(e) { showToast('Error creating draft'); }
+    };
+
+    $('btnSample').onclick = () => {
+      $('draftTitle').value = 'Sample – Overclaiming Ad';
+      $('draftChannel').value = 'ad';
+      $('draftContent').value = 'Discover the best product in the world! Our solution is 100% safe and guaranteed to transform your business overnight. Customers love how awesome and cool it is. Free forever – no catch! Join thousands who already switched to the #1 platform.';
+    };
+
+    function renderGuidelines() {
+      if (!guidelines.length) { $('gList').innerHTML = '<div class="empty">No guidelines</div>'; return; }
+      $('gList').innerHTML = `<table><thead><tr><th>Category</th><th>Title</th><th>Content</th><th>Severity</th><th>Type</th></tr></thead>
+        <tbody>${guidelines.map(g=>`<tr>
+          <td style="text-transform:capitalize">${g.category}</td><td>${g.title}</td>
+          <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${g.content}</td>
+          <td>${sevBadge(g.severity)}</td>
+          <td><span class="badge ${g.is_exact_match?'b-rule':'b-ai'}">${g.is_exact_match?'Exact':'Guidance'}</span></td>
+        </tr>`).join('')}</tbody></table>`;
+    }
+
+    $('btnAddG').onclick = async () => {
+      const title = $('gTitle').value.trim(), content = $('gContent').value.trim();
+      if (!title || !content) return showToast('Fill title and content');
+      await api(`/workspaces/${currentWs.id}/guidelines`, { method: 'POST', body: JSON.stringify({
+        category: $('gCat').value, title, content, severity: $('gSev').value, is_exact_match: $('gExact').checked
+      })});
+      guidelines = await api(`/workspaces/${currentWs.id}/guidelines`);
+      renderGuidelines(); showToast('Guideline added');
+      $('gTitle').value = ''; $('gContent').value = '';
+    };
+
+    loadAll().catch(e => { console.error(e); showToast('Backend not reachable – start the API on port 8000'); });
+  </script>
+</body>
+</html>
